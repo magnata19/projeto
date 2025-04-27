@@ -1,18 +1,19 @@
 import CasoDeUso from "@/core/shared/CasoDeUso";
 import Usuario from "../model/Usuario";
-import RepositorioUsuarioEmMemoria from "./RepositorioUsuarioEmMemoria";
 import Erros from "@/core/shared/Erros";
 import Id from "@/core/shared/Id";
 import ProvedorCriptografia from "./ProvedorCriptografia";
+import RepositorioUsuario from "./RepositorioUsuario";
 
 export default class RegistrarUsuario implements CasoDeUso<Usuario, void> {
-  constructor(private provedorCripto: ProvedorCriptografia) { }
+  constructor(
+    private repositorio: RepositorioUsuario,
+    private provedorCripto: ProvedorCriptografia) { }
 
   async executar(usuario: Usuario): Promise<void> {
-    const senhaCriptografada = this.provedorCripto.criptografar(usuario.senha);
-    const repositorio = new RepositorioUsuarioEmMemoria();
+    const senhaCriptografada = this.provedorCripto.criptografar(usuario.senha ?? '');
 
-    const usuarioExistente = await repositorio.buscarPorEmail(usuario.email);
+    const usuarioExistente = await this.repositorio.buscarPorEmail(usuario.email);
     if (usuarioExistente) throw new Error(Erros.USUARIO_JA_EXISTE);
 
     const novoUsuario: Usuario = {
@@ -22,7 +23,7 @@ export default class RegistrarUsuario implements CasoDeUso<Usuario, void> {
       senha: senhaCriptografada
     }
 
-    await repositorio.inserir(novoUsuario);
+    await this.repositorio.inserir(novoUsuario);
 
     console.log(`\n${JSON.stringify(novoUsuario)}`);
   }

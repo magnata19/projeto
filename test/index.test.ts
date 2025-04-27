@@ -1,5 +1,8 @@
-import { somar } from "@/index"
+import dotenv from 'dotenv'
+dotenv.config()
 
 test('Deve somar dois números', () => {
-    expect(somar(1, 2)).toBe(3)
+    const PORT = process.env.PORT
+    expect(PORT).toBeDefined()
+    expect(PORT).toBe('3000')
 })
