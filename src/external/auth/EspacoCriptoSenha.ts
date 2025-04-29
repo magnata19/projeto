@@ -5,4 +5,7 @@ export default class EspacoCriptoSenha implements ProvedorCriptografia {
     return senha.split("").join(" ");
   }
 
+  compararSenha(senha: string, senhaCripto: string): boolean {
+    return this.criptografar(senha) === senhaCripto;
+  }
 }

@@ -7,4 +7,8 @@ export default class SenhaCripto implements ProvedorCriptografia {
     );
   }
 
+  compararSenha(senha: string, senhaCripto: string): boolean {
+    return bcrypt.compareSync(senha, senhaCripto);
+  }
+
 }

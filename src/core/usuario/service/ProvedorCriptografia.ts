@@ -2,4 +2,5 @@
 // e o provedor de criptografia é a implementação que vai fazer a criptografia
 export default interface ProvedorCriptografia {
   criptografar(senha: string): string;
+  compararSenha(senha: string, senhaCripto: string): boolean;
 }
