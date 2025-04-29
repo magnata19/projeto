@@ -4,6 +4,8 @@ import RepositorioUsuarioEmMemoria from './external/db/RepositorioUsuarioEmMemor
 import SenhaCripto from './external/auth/SenhaCripto';
 import RegistrarUsuario from './core/usuario/service/RegistrarUsuario';
 import RegistrarUsuarioController from './external/api/RegistrarUsuarioController';
+import LoginUsuario from './core/usuario/service/LoginUsuario';
+import LoginUsuarioController from './external/api/LoginUsuarioController';
 dotenv.config();
 
 const app = express();
@@ -19,5 +21,9 @@ app.listen(PORT, () => {
 // rotas abertas
 const repositorio = new RepositorioUsuarioEmMemoria();
 const cripto = new SenhaCripto();
+
 const registrarUsuario = new RegistrarUsuario(repositorio, cripto);
+const loginUsuario = new LoginUsuario(cripto, repositorio);
+
 new RegistrarUsuarioController(app, registrarUsuario);
+new LoginUsuarioController(app, loginUsuario);
